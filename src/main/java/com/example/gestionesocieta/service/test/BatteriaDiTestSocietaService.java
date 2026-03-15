@@ -104,4 +104,80 @@ public class  BatteriaDiTestSocietaService {
     }
 
 
+
+    public void testAssociaProgetto(){
+
+        System.out.println("--------------Inizio testAssociaProgetto-------------");
+
+        Societa s = new Societa();
+        s.setDataFondazione(LocalDate.of(2020, 1, 1));
+        s.setDataChiusura(LocalDate.now().plusMonths(6));
+        societaService.inserisciNuovo(s);
+
+        // Creiamo dipendente
+        Dipendente d = new Dipendente();
+        d.setNome("Luca");
+        d.setSocieta(s);
+        d.setDataAssunzione(LocalDate.now());
+        dipendenteService.inserisciNuovo(d,s);
+
+        // Progetto 1: Durata 3 mesi (OK)
+        Progetto p1 = new Progetto();
+        p1.setNome("Sito Web");
+        p1.setDurataInMesi(3);
+        progettoService.inserisciProgetto(p1);
+
+        // Progetto 2: Durata 12 mesi (ERRORE - sfora la chiusura della società)
+        Progetto p2 = new Progetto();
+        p2.setNome("App Mobile complessa");
+        p2.setDurataInMesi(12);
+        progettoService.inserisciProgetto(p2);
+
+        try {
+            dipendenteService.aggiungiProgetti(d.getId(), List.of(p1, p2));
+        } catch (RuntimeException e) {
+            System.out.println("TEST SUCCESS: Bloccato progetto troppo lungo: " + e.getMessage());
+        }
+
+    }
+
+
+
+
+    public void testSocietaProgettiLunghi() {
+        System.out.println("--- Inizio Test Società con Progetti > 1 anno ---");
+
+        List<String> nomiSocieta = societaService.elencaSocietaConProgettiLontani();
+
+        if (nomiSocieta.isEmpty()) {
+            System.out.println("Nessuna società trovata con progetti così lunghi.");
+        } else {
+            nomiSocieta.forEach(nome -> System.out.println("Società trovata: " + nome));
+        }
+    }
+
+
+
+
+    public void testDipendenteAnziano() {
+        System.out.println("--- Ricerca Dipendente Più Anziano (Società < 1990 & Progetto >= 6m) ---");
+
+        Dipendente anziano = dipendenteService.recuperaIlPiuAnzianoCriteriSpeciali();
+
+        if (anziano != null) {
+            System.out.println("Il veterano è: " + anziano.getNome() + " " + anziano.getCognome());
+            System.out.println("Assunto il: " + anziano.getDataAssunzione());
+            System.out.println("Lavora per: " + anziano.getSocieta().getRagioneSociale());
+        } else {
+            System.out.println("Nessun dipendente soddisfa tutti i criteri contemporaneamente.");
+        }
+    }
+
+
+
+
+    
+
+
+
 }

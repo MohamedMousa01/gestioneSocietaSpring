@@ -1,6 +1,7 @@
 package com.example.gestionesocieta.service;
 
 import com.example.gestionesocieta.model.Dipendente;
+import com.example.gestionesocieta.model.Progetto;
 import com.example.gestionesocieta.model.Societa;
 
 import java.util.List;
@@ -17,4 +18,7 @@ public interface DipendenteService {
 
     public void rimuovi(Long idDipendente);
 
+    public void aggiungiProgetti(Long idDipendente, List<Progetto> progettiInstance);
+
+    public Dipendente recuperaIlPiuAnzianoCriteriSpeciali();
 }

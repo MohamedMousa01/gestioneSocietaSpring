@@ -18,5 +18,8 @@ public interface SocietaService {
 
     public List<Societa> findByExample(Societa example);
 
+    public List<String> elencaSocietaConProgettiLontani();
+
+    public List<Societa> elencaSocietaConAnomalieAssunzione();
 
 }

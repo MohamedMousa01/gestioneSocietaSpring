@@ -16,4 +16,8 @@ public interface ProgettoService {
 
     public void rimuovi(Long idProgetto);
 
+    List<Progetto> cercaProgettiConAlmenoUnDipendenteBenPagato();
+
+    public List<Progetto> elencaProgettiAnomali();
+
 }
